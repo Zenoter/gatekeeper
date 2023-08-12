@@ -1,0 +1,64 @@
+{
+  "name": "gatekeeper-express",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/gatekeeper-express/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/gatekeeper-express",
+        "main": "apps/gatekeeper-express/src/main.ts",
+        "tsConfig": "apps/gatekeeper-express/tsconfig.app.json",
+        "assets": ["apps/gatekeeper-express/src/assets"],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/gatekeeper-express/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "gatekeeper-express:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "gatekeeper-express:build:development"
+        },
+        "production": {
+          "buildTarget": "gatekeeper-express:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/gatekeeper-express/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/gatekeeper-express/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  },
+  "tags": []
+}
